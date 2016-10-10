@@ -77,6 +77,7 @@
 
 (put 'reddit-alet 'lisp-indent-function 2)
 
+;;;###autoload
 (defun reddit-kill ()
   (interactive)
   (let ((buffer (current-buffer)))
@@ -130,6 +131,7 @@
              (error "Reddit API call for '%s' failed with code %d" op code))))))
     buffer))
 
+;;;###autoload
 (defun reddit-login (&optional user password)
   (interactive)
   (when (null user)
@@ -188,6 +190,7 @@
 
 ;;;; Reddit mode
 
+;;;###autoload
 (defun reddit ()
   "Switch to Reddit buffer, creating it if necessary."
   (interactive)
@@ -224,6 +227,7 @@
 (defun reddit-buffer-name (site)
   (format "*Reddit %S*" site))
 
+;;;###autoload
 (defun reddit-search (&optional query subreddit)
   (interactive "MSearch:
 MSubreddit: ")
@@ -235,6 +239,7 @@ MSubreddit: ")
          (subreddit (list 'subreddit subreddit))
          (t '(main)))))
 
+;;;###autoload
 (defun reddit-refresh ()
   (interactive)
   (url-retrieve (reddit-site-json)
@@ -298,6 +303,7 @@ MSubreddit: ")
     (?U (insert (format "%d" (widget-get widget :reddit-upvotes))))
     (t (widget-default-format-handler widget char))))
 
+;;;###autoload
 (defun reddit-next ()
   "Get next page of threads"
   (interactive)
@@ -307,6 +313,7 @@ MSubreddit: ")
                     'reddit-refresh-cb
                     (list (current-buffer))))))
 
+;;;###autoload
 (defun reddit-prev ()
   "Get previous page of threads"
   (interactive)
@@ -318,6 +325,7 @@ MSubreddit: ")
 
 ;;;; Reddit Comments mode
 
+;;;###autoload
 (defun reddit-comments ()
   (interactive)
   (let ((widget (widget-at)))
@@ -341,6 +349,7 @@ MSubreddit: ")
     (set (make-local-variable 'reddit-entry-id) id)
     (reddit-comments-refresh)))
 
+;;;###autoload
 (defun reddit-comments-refresh ()
   (interactive)
   (url-retrieve (concat (reddit-comments-site-root reddit-entry-id) "/.json")
@@ -433,10 +442,12 @@ MSubreddit: ")
                     widget))))
     (lookup (tree-mode-icon-current-line))))
 
+;;;###autoload
 (defun reddit-comments-post ()
   (interactive)
   (reddit-post-new-buffer `(entry ,reddit-entry-id) reddit-entry-id))
 
+;;;###autoload
 (defun reddit-comments-followup ()
   (interactive)
   (let ((comment (reddit-comments-current-comment)))
@@ -465,6 +476,7 @@ MSubreddit: ")
 (define-key reddit-post-mode-map (kbd "C-c C-q") 'reddit-kill)
 (define-key reddit-post-mode-map (kbd "C-c C-c") 'reddit-post-save)
 
+;;;###autoload
 (defun reddit-post-save ()
   (interactive)
   (destructuring-bind (type parent-id author) reddit-parent-id
